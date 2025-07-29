@@ -1,0 +1,2528 @@
+:root {
+    --element-radius: 100px; /* 使用固定半径值避免动态调整 */
+    --background-color: #FFDAB9;
+}
+
+.wuxing-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+.reference-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.wuxing-item {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.wuxing-item.jin {
+    background-color: #9E9E9E;
+    top: 210px;
+    left: 400px;
+}
+
+.wuxing-item.mu {
+    background-color: #4CAF50;
+    top: 400px;
+    left: 210px;
+}
+
+.wuxing-item.shui {
+    background-color: #2196F3;
+    top: 210px;
+    left: 20px;
+}
+
+.wuxing-item.huo {
+    background-color: #ff4500;
+    top: 20px;
+    left: 210px;
+}
+
+.wuxing-item.tu {
+    background-color: #FFC107;
+    top: 210px;
+    left: 210px;
+}
+
+.toggle-reference, .upload-reference {
+    margin: 20px 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.toggle-reference {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.upload-reference {
+    background-color: #2196F3;
+    color: white;
+}
+
+.toggle-reference:hover, .upload-reference:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    background-color: var(--background-color);
+    margin: 0; /* 移除默认边距确保全屏覆盖 */
+    overflow-x: hidden;
+}
+
+.container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: var(--background-color);
+}
+
+/* 删除canvas样式 */
+#pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    border: none;
+}
+
+.pentagon-container {
+    position: relative;
+    width: min(90vmin, 900px);
+    height: min(90vmin, 900px);
+    margin: 4rem auto 2rem;
+}
+
+.center-point {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* 确保显示在元素上方 */
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+/* 被克制元素动画 */
+.restrained .element-icon {
+
+    border: 3px solid #ff4444;
+}
+
+/* 克制箭头动画 */
+.克制-arrow.fire-to-metal {
+
+    position: relative;
+    overflow: hidden;
+}
+
+.克制-arrow.fire-to-metal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+
+}
+
+/* 动画关键帧 */
+
+
+
+
+
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 18rem auto 2rem; /* 整体下移并顺时针旋转 */
+    transform: rotate(-36deg);
+}
+
+.wuxing-item:hover {
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 15vmin;
+    max-width: 120px;
+    box-sizing: border-box;
+    transform-origin: center;
+}
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  padding: 10px !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+/* 删除重复样式 */
+/* 唯一五行元素定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(var(--element-radius));
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(var(--element-radius));
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(var(--element-radius));
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(var(--element-radius));
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(var(--element-radius));
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+
+
+/* 五行状态动画效果 */
+.element.strong {
+
+}
+
+.element.restrained {
+
+    filter: hue-rotate(180deg) brightness(0.7);
+}
+
+/* 强盛状态动画 */
+
+
+/* 被克制状态动画 */
+
+
+/* 火元素强盛时的特殊效果 */
+.fire-element.strong .fire-to-metal {
+    box-shadow: 0 0 30px rgba(255, 69, 0, 0.9), 0 0 40px rgba(255, 69, 0, 0.7);
+    background-size: 200% 100%;
+
+}
+
+
+
+/* 金元素被克制时的特殊效果 */
+.metal-element.restrained .metal-icon {
+    box-shadow: 0 0 15px rgba(200, 0, 0, 0.5);
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+  }
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(var(--element-radius));
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(var(--element-radius));
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(var(--element-radius));
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(var(--element-radius));
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(var(--element-radius));
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+    overflow: hidden;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+/*
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(0, var(--element-radius)) rotate(0deg);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(0, var(--element-radius)) rotate(-72deg);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(0, var(--element-radius)) rotate(-144deg);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(0, var(--element-radius)) rotate(-216deg);
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(0, var(--element-radius)) rotate(-288deg);
+}
+*/
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(0, var(--element-radius)) rotate(0deg);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(0, var(--element-radius)) rotate(-72deg);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(0, var(--element-radius)) rotate(-144deg);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(var(--element-radius), 0);
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(var(--element-radius), 0);
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+/* 删除像素定位样式 */
+/*
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(var(--element-radius), 0);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(var(--element-radius), 0);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(var(--element-radius), 0);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(0, -200px) rotate(-216deg);
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(0, -200px) rotate(-288deg);
+}
+*/
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(0, -200px) rotate(0deg);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(0, -200px) rotate(-72deg);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(0, -200px) rotate(-144deg);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(0, -200px) rotate(-216deg);
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(0, -200px) rotate(-288deg);
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(0, -200px) rotate(0deg);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(0, -200px) rotate(-72deg);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(0, -200px) rotate(-144deg);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(0, -200px) rotate(-216deg);
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(0, -200px) rotate(-288deg);
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+    0% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,0,0,0.3); }
+}
+
+
+    0% { transform: scaleX(1); opacity: 0.8; }
+    50% { transform: scaleX(1.2); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0.8; }
+}
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 4rem auto 2rem;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(0, -200px) rotate(0deg);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(0, -200px) rotate(-72deg);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(0, -200px) rotate(-144deg);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg) translate(0, -200px) rotate(-216deg);
+}
+
+.water-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(288deg) translate(0, -200px) rotate(-288deg);
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wood-icon {
+    background: radial-gradient(circle at center, #8BC34A, #4CAF50);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+}
+
+.fire-icon {
+    background: radial-gradient(circle at center, #ff9900, #ff3300);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.7);
+}
+
+.earth-icon {
+    background: radial-gradient(circle at center, #FFEB3B, #FFC107);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.metal-icon {
+    background: radial-gradient(circle at center, #e0e0e0, #9E9E9E);
+    box-shadow: 0 0 20px rgba(158, 158, 158, 0.7);
+}
+
+.water-icon {
+    background: radial-gradient(circle at center, #64B5F6, #2196F3);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+.element h2 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.element-status {
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* 生克关系箭头 */
+.relationships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.relationship-arrow {
+    position: absolute;
+    height: 4px;
+    background: rgba(150, 150, 150, 0.5);
+    transform-origin: left center;
+    border-radius: 2px;
+}
+
+.relationship-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(150, 150, 150, 0.7);
+}
+
+/* 动画效果 */
+.element-active .element-icon {
+    transform: scale(1.2);
+
+}
+
+.element-restrained .element-icon {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+
+
+
+
+.pulse-animation {
+
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* 删除canvas样式 */
+/* #pentagonCanvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+} */
+width: 80vmin;
+    height: 80vmin;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.element-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.wood {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.fire {
+    background-color: #ff4500;
+    color: white;
+}
+
+.earth {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.metal {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.water {
+    background-color: #2196F3;
+    color: white;
+}
+
+.element-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #666;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    margin-left: 1rem;
+}
+
+.reset-button:hover {
+    background-color: #666;
+    color: white;
+}
+
+.pentagon-container {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    margin: 4rem auto 2rem;
+}
+
+.element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 120px;
+    box-sizing: border-box;
+.element-icon {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.element .element-icon h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.7);
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+/* 五角星顶点定位 */
+.wood-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) translate(0, -200px) rotate(0deg);
+}
+
+.fire-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(72deg) translate(0, -200px) rotate(-72deg);
+}
+
+.earth-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(144deg) translate(0, -200px) rotate(-144deg);
+}
+
+.metal-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(216deg)

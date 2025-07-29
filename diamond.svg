@@ -1,0 +1,12 @@
+<svg width="100" height="100" viewBox="-5 -5 10 10" style="border: 1px solid #eee;">
+  <!-- 菱形（polygon元素，连接四个顶点） -->
+  <polygon 
+    points="2.5,0 0,2.5 -2.5,0 0,-2.5"
+    fill="#f1c40f"  <!-- 填充色（土黄色，可选） -->
+    stroke="#000"   <!-- 边框色（黑色，可选） -->
+    stroke-width="0.1"  <!-- 边框宽度（可选） -->
+  />
+  <!-- 辅助线：对角线（可选，用于展示对角线长度） -->
+  <line x1="-2.5" y1="0" x2="2.5" y2="0" stroke="#ccc" stroke-width="0.1" />  <!-- 水平对角线（长度5） -->
+  <line x1="0" y1="-2.5" x2="0" y2="2.5" stroke="#ccc" stroke-width="0.1" />  <!-- 垂直对角线（长度5） -->
+</svg>
