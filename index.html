@@ -1,34 +1,387 @@
-<!DOCTYPE html> 
- <html lang="zh-CN"> 
- <head> 
-     <meta charset="UTF-8"> 
-     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-     <title>五行生克制化动画</title> 
-     <!-- 引入CSS样式（后续调整位置/样式） --> 
-     <link rel="stylesheet" href="styles.css"> 
- </head> 
- <body> 
-     <!-- 1. 控制按钮：显示/隐藏参照图（方便调整位置） --> 
-     <div class="button-container">
-    <button class="toggle-reference">显示参照图</button>
-    <input type="file" id="reference-upload" accept="image/png, image/jpeg, image/svg+xml" style="display: none;">
-    <button class="upload-reference">上传对照图</button>
-</div> 
- 
-     <!-- 2. 父容器：包裹参照图和五行元素（关键：相对定位） --> 
-     <div class="wuxing-container"> 
-         <!-- 3. 参照图：作为背景指导（半透明，不遮挡元素） --> 
-         <div class="reference-image" style="background-image: url('wuxing-reference.png');"></div> 
-         
-         <!-- 4. 五行元素：用绝对定位，可自定义位置（类名+data属性方便后续扩展） --> 
-         <div class="wuxing-item jin" data-element="jin">金</div> 
-         <div class="wuxing-item mu" data-element="mu">木</div> 
-         <div class="wuxing-item shui" data-element="shui">水</div> 
-         <div class="wuxing-item huo" data-element="huo">火</div> 
-         <div class="wuxing-item tu" data-element="tu">土</div> 
-     </div> 
- 
-     <!-- 后续动画用JavaScript（暂时空，第二步再写） --> 
-     <script src="script.js"></script> 
- </body> 
- </html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五行生克制化动画（精准交互优化）</title>
+    <style>
+        /* 1. 基础重置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* 5. 父容器（全屏，溢出隐藏） */
+        .wuxing-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f8f9fa;
+            overflow: hidden;
+        }
+
+        /* 6. 页面 wrapper（可缩放、可拖动） */
+        .wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            transition: transform 0.2s ease-in-out; /* 顺滑缩放/拖动过渡 */
+            cursor: grab; /* 拖动页面时的鼠标指针 */
+            user-select: none; /* 禁止选中文本 */
+        }
+        .wrapper.dragging-page {
+            cursor: grabbing; /* 拖动时的鼠标指针 */
+            transition: none; /* 拖动时取消过渡（避免卡顿） */
+        }
+
+        /* 7. 参照图（适应 wrapper 大小） */
+        .reference-image {
+            width: 80vw;
+            height: 80vh;
+
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.4;
+            cursor: crosshair; /* 标记模式下的鼠标指针 */
+        }
+
+        /* 8. 五行元素（核心：圆形+中心点对齐） */
+        .wuxing-item {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ccc;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            line-height: 80px;
+            cursor: move;
+            z-index: 2;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .mu { background-color: #2ecc71; }
+        .huo { background-color: #e74c3c; }
+        .tu { background-color: #f1c40f; z-index: 3; }
+        .jin { background-color: #c0c0c0; color: #2d3436; }
+        .shui { background-color: #3498db; }
+
+        /* 9. 圆心亮点（增强中心点视觉） */
+
+
+        /* 10. 拖动时效果（更明显的反馈） */
+        .wuxing-item.dragging {
+            opacity: 0.8;
+            transform: scale(1.05); /* 轻微缩放 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 增加阴影 */
+        }
+        .wuxing-item.dragging span { display: none; }
+
+        /* 11. 固定元素样式（明确提示无法拖动） */
+        .wuxing-item.fixed {
+            cursor: not-allowed;
+            opacity: 0.9;
+            box-shadow: 0 0 0 2px #95a5a6; /* 灰色边框 */
+        }
+
+        /* 12. 响应式调整（手机端） */
+        @media (max-width: 768px) {
+            .control-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            .vertex-list {
+                min-width: 200px;
+                bottom: 60px;
+            }
+            .coordinate-display {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+            .wuxing-item {
+                width: 60px;
+                height: 60px;
+                font-size: 16px;
+                line-height: 60px;
+            }
+            .wuxing-item::after {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 父容器（全屏） -->
+    <div class="wuxing-container">
+        <!-- 页面 wrapper（可缩放、可拖动） -->
+        <div class="wrapper">
+            <!-- 参照图 -->
+            <div class="reference-image"></div>
+            <!-- 五行元素 -->
+            <div class="wuxing-item mu" data-element="mu"><span>木</span></div>
+            <div class="wuxing-item huo" data-element="huo"><span>火</span></div>
+            <div class="wuxing-item tu" data-element="tu"><span>土</span></div>
+            <div class="wuxing-item jin" data-element="jin"><span>金</span></div>
+            <div class="wuxing-item shui" data-element="shui"><span>水</span></div>
+        </div>
+    </div>
+
+    <!-- 核心交互逻辑 -->
+    <script>
+        // 状态变量
+        let draggedElement = null;
+        let offsetX = 0;
+        let offsetY = 0;
+        let scaleValue = 1; // 页面缩放比例（1倍为原始）
+let isDraggingPage = false; // 是否在拖动页面
+let startX = 0; // 页面拖动起始X坐标（鼠标）
+let startY = 0; // 页面拖动起始Y坐标（鼠标）
+let initialTranslateX = 0; // 页面初始X偏移（拖动前）
+let initialTranslateY = 0; // 页面初始Y偏移（拖动前）
+
+        // DOM元素缓存
+        const coordinateDisplay = document.querySelector('.coordinate-display');
+        const vertexList = document.querySelector('.vertex-list');
+        const vertexListUl = document.querySelector('#vertex-list');
+        const wrapper = document.querySelector('.wrapper');
+        const referenceImage = document.querySelector('.reference-image');
+        const container = document.querySelector('.wuxing-container');
+        const controlButtons = document.querySelectorAll('.control-btn');
+
+
+        // 通知提示功能（替代alert，提升用户体验）
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.padding = '12px 24px';
+            notification.style.backgroundColor = 'rgba(46, 204, 113, 0.9)';
+            notification.style.color = 'white';
+            notification.style.borderRadius = '4px';
+            notification.style.zIndex = '9999';
+            notification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+            notification.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            notification.textContent = message;
+
+            // 添加到文档
+            document.body.appendChild(notification);
+
+            // 自动移除
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(-50%) translateY(-10px)';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+        }
+
+        // 1. 初始化：加载本地存储的元素位置
+        function init() {
+            // 加载元素位置
+            document.querySelectorAll('.wuxing-item').forEach(item => {
+                const saved = localStorage.getItem(`wuxing_${item.dataset.element}`);
+                if (saved) {
+                    const { left, top } = JSON.parse(saved);
+                    item.style.left = left;
+                    item.style.top = top;
+                    item.classList.add('fixed');
+                }
+            });
+            // 渲染顶点列表
+
+            // 初始化拖动事件（仅未固定元素）
+            initDragEvents();
+        }
+
+        // 2. 初始化事件监听（统一管理，避免重复绑定）
+        function initEventListeners() {
+            // 页面缩放
+            wrapper.addEventListener('wheel', handleWheel);
+            // 页面拖动
+            wrapper.addEventListener('mousedown', handleWrapperMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            // 参照图双击标记
+
+        }
+
+        // 3. 初始化元素拖动事件（仅未固定元素）
+        function initDragEvents() {
+            // 移除旧事件（避免重复绑定）
+            document.querySelectorAll('.wuxing-item').forEach(item => {
+                item.removeEventListener('mousedown', onElementMouseDown);
+            });
+            // 添加新事件（未固定元素）
+            document.querySelectorAll('.wuxing-item:not(.fixed)').forEach(item => {
+                item.addEventListener('mousedown', onElementMouseDown);
+            });
+        }
+
+        // 4. 页面缩放处理函数
+        function handleWheel(e) {
+            e.preventDefault(); // 阻止浏览器默认滚动
+
+            // 计算缩放中心（鼠标在wrapper内的位置）
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const mouseX = e.clientX - wrapperRect.left; // 鼠标在wrapper内的X坐标
+            const mouseY = e.clientY - wrapperRect.top; // 鼠标在wrapper内的Y坐标
+            const centerX = wrapperRect.width / 2; // wrapper中心X
+            const centerY = wrapperRect.height / 2; // wrapper中心Y
+
+            // 调整缩放比例（滚轮向上=放大，向下=缩小）
+            const scaleDelta = e.deltaY * -0.0015; // 缩放速度（0.0015为最佳，更顺滑）
+            const newScale = Math.max(0.3, Math.min(scaleValue + scaleDelta, 5)); // 限制缩放范围（0.3~5倍）
+
+            // 计算缩放后的偏移量（保持鼠标位置不变）
+            const scaleRatio = newScale / scaleValue;
+            const newTranslateX = initialTranslateX + (mouseX - centerX) * (1 - scaleRatio);
+            const newTranslateY = initialTranslateY + (mouseY - centerY) * (1 - scaleRatio);
+
+            // 更新缩放比例和偏移量
+            scaleValue = newScale;
+            initialTranslateX = newTranslateX;
+            initialTranslateY = newTranslateY;
+
+            // 应用变换（保留偏移+顺滑过渡）
+            requestAnimationFrame(() => {
+                wrapper.style.transform = `translate(${initialTranslateX}px, ${initialTranslateY}px) scale(${scaleValue})`;
+            });
+        }
+
+        // 5. 页面拖动开始处理函数
+        function handleWrapperMouseDown(e) {
+            // 标记模式或点击元素时，不允许拖动页面
+            if (isMarking || e.target.classList.contains('wuxing-item')) return;
+
+            isDraggingPage = true;
+            wrapper.classList.add('dragging-page');
+            startX = e.clientX;
+            startY = e.clientY;
+
+            // 获取当前页面偏移（拖动前）
+            const transform = getComputedStyle(wrapper).transform;
+            const matrix = new DOMMatrix(transform);
+            initialTranslateX = matrix.m41;
+            initialTranslateY = matrix.m42;
+
+            // 阻止冒泡（避免触发元素拖动）
+            e.stopPropagation();
+        }
+
+        // 6. 鼠标移动处理函数（统一处理页面拖动和元素拖动）
+        function handleMouseMove(e) {
+            if (!isDraggingPage) return;
+
+            // 计算鼠标移动距离
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            // 应用新的偏移（保留缩放比例）
+            requestAnimationFrame(() => {
+                wrapper.style.transform = `translate(${initialTranslateX + dx}px, ${initialTranslateY + dy}px) scale(${scaleValue})`;
+            });
+        }
+
+        // 7. 鼠标松开处理函数（统一处理页面拖动和元素拖动）
+        function handleMouseUp() {
+            if (isDraggingPage) {
+                isDraggingPage = false;
+                wrapper.classList.remove('dragging-page');
+            }
+        }
+
+        // 7. 元素拖动：鼠标按下（修正：计算偏移量）
+        function onElementMouseDown(e) {
+            // 页面拖动时，不允许拖动元素
+            if (isDraggingPage) return;
+
+            draggedElement = this;
+            // 计算鼠标在元素内的偏移（避免元素跳动）
+            const rect = draggedElement.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            // 添加拖动类（样式反馈）
+            draggedElement.classList.add('dragging');
+
+            // 添加全局事件（拖动+松开）
+            document.addEventListener('mousemove', onElementDrag);
+            document.addEventListener('mouseup', onElementDrop);
+
+            // 阻止冒泡（避免触发页面拖动）
+            e.stopPropagation();
+        }
+
+        // 8. 元素拖动：鼠标移动（修正：紧跟鼠标+实时坐标）
+        function onElementDrag(e) {
+            if (!draggedElement) return;
+
+            // 计算元素新位置（基于容器坐标）
+            const containerRect = container.getBoundingClientRect();
+            // 计算容器的绝对位置（考虑滚动）
+            const containerX = containerRect.left + window.scrollX;
+            const containerY = containerRect.top + window.scrollY;
+            // 使用pageX/pageY计算绝对位置
+            const newLeft = e.pageX - containerX - offsetX;
+            const newTop = e.pageY - containerY - offsetY;
+
+            // 移除边界限制，确保元素紧跟鼠标
+            // 应用新位置（顺滑拖动）
+            requestAnimationFrame(() => {
+                draggedElement.style.left = `${newLeft.toFixed(0)}px`;
+                draggedElement.style.top = `${newTop.toFixed(0)}px`;
+
+            });
+        }
+
+        // 9. 元素拖动：鼠标松开（修正：吸附+重置状态）
+        function onElementDrop() {
+            if (!draggedElement) return;
+
+            // 移除拖动类（样式恢复）
+            draggedElement.classList.remove('dragging');
+            // 移除全局事件
+            document.removeEventListener('mousemove', onElementDrag);
+            document.removeEventListener('mouseup', onElementDrop);
+            // 重置拖动元素
+            draggedElement = null;
+        }
+
+        // 12. 固定所有位置
+        function fixAllPositions() {
+            document.querySelectorAll('.wuxing-item').forEach(item => {
+                localStorage.setItem(`wuxing_${item.dataset.element}`, JSON.stringify({
+                    left: item.style.left,
+                    top: item.style.top
+                }));
+                item.classList.add('fixed');
+            });
+            initDragEvents(); // 重新初始化拖动事件（固定元素无法拖动）
+            showNotification('位置已固定！下次打开会保留～');
+        }
+
+        // 13. 解除所有固定
+        function unfixAllPositions() {
+            document.querySelectorAll('.wuxing-item').forEach(item => {
+                localStorage.removeItem(`wuxing_${item.dataset.element}`);
+                item.classList.remove('fixed');
+            });
+            initDragEvents(); // 重新初始化拖动事件（未固定元素可拖动）
+            showNotification('已解除固定！元素可重新拖动～');
+        }
+
+        // 10. 显示/隐藏参照图
+        function toggleReference() {
+            referenceImage.style.display = referenceImage.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // 14. 页面加载时初始化
+        window.addEventListener('load', () => {
+            init();
+            initEventListeners();
+        });
+    </script>
+</body>
+</html>

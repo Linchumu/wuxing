@@ -3,100 +3,6 @@
     --background-color: #FFDAB9;
 }
 
-.wuxing-container {
-    position: relative;
-    width: 500px;
-    height: 500px;
-    margin: 0 auto;
-}
-
-.reference-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.3;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.wuxing-item {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.wuxing-item.jin {
-    background-color: #9E9E9E;
-    top: 210px;
-    left: 400px;
-}
-
-.wuxing-item.mu {
-    background-color: #4CAF50;
-    top: 400px;
-    left: 210px;
-}
-
-.wuxing-item.shui {
-    background-color: #2196F3;
-    top: 210px;
-    left: 20px;
-}
-
-.wuxing-item.huo {
-    background-color: #ff4500;
-    top: 20px;
-    left: 210px;
-}
-
-.wuxing-item.tu {
-    background-color: #FFC107;
-    top: 210px;
-    left: 210px;
-}
-
-.toggle-reference, .upload-reference {
-    margin: 20px 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.toggle-reference {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.upload-reference {
-    background-color: #2196F3;
-    color: white;
-}
-
-.toggle-reference:hover, .upload-reference:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 body {
     background-color: var(--background-color);
     margin: 0; /* 移除默认边距确保全屏覆盖 */
@@ -138,17 +44,8 @@ body {
     margin: 4rem auto 2rem;
 }
 
-.center-point {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background-color: #ff0000;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 100; /* 确保显示在元素上方 */
-}
+
+
 
 h1 {
     color: #333;
@@ -256,14 +153,6 @@ h1 {
     height: 80vmin;
     margin: 18rem auto 2rem; /* 整体下移并顺时针旋转 */
     transform: rotate(-36deg);
-}
-
-.wuxing-item:hover {
-    transform: scale(1.1);
-}
-
-.hidden {
-    display: none;
 }
 
 .element {
@@ -1660,71 +1549,77 @@ h1 {
     color: white;
 }
 
-.pentagon-container {
-    position: relative;
-    width: 80vmin;
-    height: 80vmin;
-    margin: 4rem auto 2rem;
-}
-
-.element {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: 120px;
-    box-sizing: border-box;
-.element-icon {
-  border-radius: 50%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-.element .element-icon h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 3px rgba(0,0,0,0.7);
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1;
-  transform: translateY(-2px);
-}
-
-/* 五角星顶点定位 */
-.wood-element {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(0deg) translate(0, -200px) rotate(0deg);
-}
-
-.fire-element {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(72deg) translate(0, -200px) rotate(-72deg);
-}
-
-.earth-element {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(144deg) translate(0, -200px) rotate(-144deg);
-}
-
-.metal-element {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(216deg) translate(0, -200px) rotate(-216deg);
-}
-
-.water-element {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(288deg) translate(0, -200px) rotate(-288deg);
-}
+/* 2. 父容器：相对定位（关键！五行元素的绝对定位以它为基准） */
+ .wuxing-container {
+     position: relative; /* 相对定位，子元素绝对定位的基准 */
+     width: 100vw; /* 占满整个浏览器宽度 */
+     height: 100vh; /* 占满整个浏览器高度 */
+     background-color: #f0f0f0; /* 背景色，方便看元素 */
+ }
+ 
+ /* 3. 参照图：半透明背景，指导元素位置（默认显示，可隐藏） */
+ .reference-image {
+     position: absolute; /* 绝对定位，覆盖整个父容器 */
+     top: 0;
+     left: 0;
+     width: 100%; /* 占满父容器宽度 */
+     height: 100%; /* 占满父容器高度 */
+     background-image: url('wuxing-reference.png'); /* 参照图路径（需与项目文件夹中的文件名一致） */
+     background-size: contain; /* 保持参照图比例，不拉伸 */
+     background-position: center; /* 参照图居中显示 */
+     background-repeat: no-repeat; /* 不重复显示 */
+     opacity: 0.5; /* 半透明（0.1~1之间，数值越小越透明） */
+     z-index: 1; /* 参照图在底层，不遮挡五行元素 */
+ }
+ 
+ /* 4. 五行元素：绝对定位（关键！可自定义位置） */
+ .wuxing-item {
+     position: absolute; /* 绝对定位，相对于父容器 */
+     padding: 15px 30px; /* 内边距，让元素大一点 */
+     font-size: 24px; /* 字体大小 */
+     border-radius: 8px; /* 圆角，更美观 */
+     color: white; /* 文字颜色（与背景色对比） */
+     text-align: center; /* 文字居中 */
+     z-index: 2; /* 五行元素在参照图上层，显示清晰 */
+ }
+ 
+ /* 5. 五行元素的初始位置（根据参照图调整，示例为传统圆形布局） */
+ /* 金：右上角（根据参照图调整left/top值） */
+ .jin {
+     background-color: #c0c0c0; /* 灰色（金的代表色） */
+     left: 80%; /* 距离父容器左边80%（靠右） */
+     top: 10%; /* 距离父容器顶部10%（靠上） */
+ }
+ 
+ /* 木：左上角（根据参照图调整） */
+ .mu {
+     background-color: #2ecc71; /* 绿色（木的代表色） */
+     left: 10%; /* 靠左 */
+     top: 10%; /* 靠上 */
+ }
+ 
+ /* 水：下方居中（根据参照图调整） */
+ .shui {
+     background-color: #3498db; /* 蓝色（水的代表色） */
+     left: 50%; /* 水平居中（父容器的50%） */
+     bottom: 10%; /* 距离父容器底部10%（靠下） */
+     transform: translateX(-50%); /* 水平居中修正（绝对定位元素默认左对齐） */
+ }
+ 
+ /* 火：右侧居中（根据参照图调整） */
+ .huo {
+     background-color: #e74c3c; /* 红色（火的代表色） */
+     right: 10%; /* 靠右 */
+     top: 50%; /* 垂直居中（父容器的50%） */
+     transform: translateY(-50%); /* 垂直居中修正 */
+ }
+ 
+ /* 土：左侧下方（根据参照图调整） */
+ .tu {
+     background-color: #f1c40f; /* 黄色（土的代表色） */
+     left: 10%; /* 靠左 */
+     bottom: 10%; /* 靠下 */
+ }
 
 .element-icon {
     width: 100px;

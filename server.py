@@ -39,7 +39,7 @@ class NoCacheHTTPRequestHandler(SimpleHTTPRequestHandler):
                 print("Client disconnected before response completed")
         except FileNotFoundError:
             # 处理Vite客户端和favicon请求
-            if path in ['/@vite/client', '/favicon.ico']:
+            if path in ['/favicon.ico', '/@vite/client']:
                 self.send_response(200)
                 self.send_cache_headers()
                 self.end_headers()
@@ -56,7 +56,7 @@ class NoCacheHTTPRequestHandler(SimpleHTTPRequestHandler):
     def send_cache_headers(self, file_path=None):
         if file_path and file_path.endswith(('.css', '.js', '.png', '.jpg', '.svg')):
             # 静态资源缓存10分钟
-            self.send_header('Cache-Control', 'public, max-age=600')
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')  # Disable cache for development
             self.send_header('Expires', self.date_time_string(time.time() + 600))
         else:
             # HTML等动态内容不缓存
